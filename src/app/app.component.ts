@@ -23,7 +23,7 @@ import {Decimal} from 'decimal.js';
     </div>
     <div class="mat-headline">Nano BIP32-Ed25519</div>
     <div class="mat-caption">
-      The purpose of this site is to display how multiple Nano addresses can be produced from a single parent public key and parent chain code with no knowledge of the parent, and counterpart, private keys. Use cases for such an ability would be the creation of watch-only wallets. This link includes other use cases: <a href="https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki#Use_cases">https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki#Use_cases</a><br>
+      The purpose of this site is to show how multiple Nano addresses can be produced from a single parent public key and parent chain code with no knowledge of the counterpart parent and child private keys. A use case for such an ability would be the creation of watch-only wallets. This link includes other use cases: <a href="https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki#Use_cases">https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki#Use_cases</a><br>
       <br>
       This page implements the BIP32-Ed25519 specification outlined in <a href="https://drive.google.com/file/d/0ByMtMw2hul0EMFJuNnZORDR2NDA/view" target="_blank" style="font-style:italics;"><i>BIP32-Ed25519 Hierarchical Deterministic Keys over a Non-linear Keyspace</i></a>. This method involves a non-traditional signing that nonetheless produces a signature verifiable by Nano nodes.
     </div>
@@ -96,10 +96,10 @@ import {Decimal} from 'decimal.js';
                     <li>Download and setup the Nano <strong>developer wallet</strong> if you haven't already: <a href="https://nano.org/en/wallet/">https://nano.org/en/wallet/</a></li>
                     <li>Locate the config.json file for the wallet: <a href="https://github.com/nanocurrency/raiblocks/wiki/config.json#where-is-the-configuration-file-located">https://github.com/nanocurrency/raiblocks/wiki/config.json#where-is-the-configuration-file-located</a></li>
                     <li>Open the config.json file and set "rpc_enable" to "true"</li>
-                    <li>Allow the wallet to sync before opening a command line and running the cURL command below </li>
+                    <li>Allow the wallet to sync (this could take some time)</li>
+                    <li>Open a command line and run the cURL command below</li>
                   </ul>
                 </li>
-                
               </ol>
             </div>
           </div>
