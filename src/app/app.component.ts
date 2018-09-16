@@ -140,7 +140,7 @@ import {Decimal} from 'decimal.js';
           </div>
           <div fxLayout="row wrap" fxLayoutAlign="start start" fxLayoutGap="5px" style="margin-top:10px;">
             <div fxFlex="1 0 100%" class="mat-h4" [hidden]="!example_block_hash">
-              <strong>This Transaction's Future Hash:</strong> {{example_block_hash}}
+              <strong>This Future Transaction's Hash:</strong> {{example_block_hash}}
             </div>
             <div fxFlex="1 0 100%" class="mat-h4">
               <strong>cURL command (single line):</strong><br>
@@ -362,6 +362,7 @@ export class AppComponent {
 
     this.example_block_sig = bip32_ed25519.uint8ToHex(example_block_sig_uint8).toUpperCase();
 
+    this.example_block_work = null;
     this.working = true;
     let hex_to_get_work_for = this.type_of_the_example_block == 'open' ? this.pub_child_key_hex : this.example_block_prev;
     this.getWork(hex_to_get_work_for, function(work, hex, fromCache) {

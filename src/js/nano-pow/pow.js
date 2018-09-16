@@ -1151,7 +1151,7 @@ function integrateWasmJS() {
   var method = Module["wasmJSMethod"] || "native-wasm";
   Module["wasmJSMethod"] = method;
   var wasmTextFile = Module["wasmTextFile"] || "pow.wast";
-  var wasmBinaryFile = Module["wasmBinaryFile"] || "http://localhost:4200/js/pow.wasm";
+  var wasmBinaryFile = Module["wasmBinaryFile"] || "pow.wasm";
   var asmjsCodeFile = Module["asmjsCodeFile"] || "pow.temp.asm.js";
   if (typeof Module["locateFile"] === "function") {
     wasmTextFile = Module["locateFile"](wasmTextFile);
