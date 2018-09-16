@@ -9,9 +9,11 @@ import {
 import * as ed25519 from '../js/ed25519.js';
 import * as bip32_ed25519 from '../js/bip32_ed25519.js';
 import * as bip39 from '../js/bip39-browserified.js';
-import * as nano from 'nanocurrency';
+import * as nano from '../../node_modules/nanocurrency/dist/nanocurrency.cjs.js';//'nanocurrency';
 
 import * as nano_pow from '../js/nano-pow/startThreads.js';
+
+import {Decimal} from 'decimal.js';
 
 @Component({
   selector: 'app-root',
@@ -116,7 +118,7 @@ import * as nano_pow from '../js/nano-pow/startThreads.js';
                      [(ngModel)]="example_block_link"/>
             </mat-form-field>
             <mat-form-field fxFlex="1 0 49%" *ngIf="type_of_the_example_block == 'send' || type_of_the_example_block == 'receive'">
-              <input matInput placeholder="Account's Current Balance" [(ngModel)]="nano_account_cur_bal"/>
+              <input type="number" step="0.000001" matInput placeholder="Account's Current Balance" [(ngModel)]="nano_account_cur_bal"/>
               <mat-hint align="start" *ngIf="nano_account_cur_bal"><strong>{{nano_account_cur_bal}} Nano = {{nanoToRaw(nano_account_cur_bal)}} raw</strong></mat-hint>
             </mat-form-field>
             <mat-form-field fxFlex="1 0 49%" *ngIf="type_of_the_example_block == 'send' || type_of_the_example_block == 'receive'">
@@ -402,19 +404,33 @@ export class AppComponent {
   }
 
   public nanoToRaw(amount) {
+    let dec = Decimal;
+    let nan = nano;
     if (amount === 0 || amount === '0')
       return "0";
     else
-      return nano.convert(amount.toString(), {from: 'Nano', to: 'raw'}).toString();
+      return nano.convert(new Decimal(amount.toString()).toFixed(), {from: 'Nano', to: 'raw'}).toString();
   }
 
   public example_block_bal() {
+    let amount_to_open_with = parseFloat(this.nano_account_amount_to_open_with);
+    let current_balance = parseFloat(this.nano_account_cur_bal);
+    let amount_to_send_or_receive = parseFloat(this.nano_account_amount_to_send_or_receive);
     if (this.type_of_the_example_block == 'open') {
-      return this.nanoToRaw(parseFloat(this.nano_account_amount_to_open_with))
+      if (amount_to_open_with < 0)
+        return 'invalid value entered'
+      else
+        return this.nanoToRaw(parseFloat(this.nano_account_amount_to_open_with))
     } else if (this.type_of_the_example_block == 'send') {
-      return this.nanoToRaw(parseFloat(this.nano_account_cur_bal) - parseFloat(this.nano_account_amount_to_send_or_receive));
+      if (current_balance < 0 || amount_to_send_or_receive < 0 || current_balance - amount_to_send_or_receive < 0)
+        return 'invalid values entered'
+      else
+        return this.nanoToRaw(parseFloat(this.nano_account_cur_bal) - parseFloat(this.nano_account_amount_to_send_or_receive));
     } else if (this.type_of_the_example_block == 'receive') {
-      return this.nanoToRaw(parseFloat(this.nano_account_cur_bal) + parseFloat(this.nano_account_amount_to_send_or_receive));
+      if (current_balance < 0 || amount_to_send_or_receive < 0)
+        return 'invalid values entered'
+      else
+        return this.nanoToRaw(parseFloat(this.nano_account_cur_bal) + parseFloat(this.nano_account_amount_to_send_or_receive));
     }
   }
 

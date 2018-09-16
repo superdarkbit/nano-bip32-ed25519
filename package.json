@@ -25,6 +25,7 @@
     "@angular/router": "^6.1.0",
     "blakejs": "^1.1.0",
     "core-js": "^2.5.4",
+    "decimal.js": "^10.0.1",
     "hammerjs": "^2.0.8",
     "jsbn": "^1.1.0",
     "jssha": "^2.3.1",
