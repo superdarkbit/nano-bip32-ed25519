@@ -4,6 +4,7 @@
     const blake = require('blakejs');
 
     const BigInteger = jsbn.BigInteger;
+
     //  Ed25519 - digital signatures based on curve25519
     //  Adapted from http://ed25519.cr.yp.to/python/ed25519.py by Ron Garret
 
@@ -88,7 +89,6 @@
       return((this[j]&(1<<(n%this.DB)))!=0);
     }*/
 
-
     var zero = BigInteger.ZERO;
     var one = BigInteger.ONE;
     var two = bi('2');
@@ -119,7 +119,6 @@
     BigInteger.prototype.equalTo = BigInteger.prototype.equals;
 
     //BigInteger.prototype.testBit = bnTestBit;
-
 
     var xff = bi('255');
     var b = bi('256');
