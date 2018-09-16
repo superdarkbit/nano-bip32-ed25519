@@ -1,3 +1,3 @@
-To verify message signatures created using the code found here, utilize the <a href="https://github.com/jamescoxon/RetroXRBWallet/tree/master/python-pure25519-blake">python-pure25519-blake</a> library or any other library that can verify BLAKE2b hash function based Ed25519 signatures.
+To verify message signatures created using the code found here, utilize the <a href="https://github.com/jamescoxon/RetroXRBWallet/tree/master/python-pure25519-blake" target="_blank">python-pure25519-blake</a> library or any other library that can verify BLAKE2b hash function based Ed25519 signatures.
 
 For the python-pure25519-blake library, install using the commands "python setup.py build" and "python setup.py install". To verify messages, create a verifying key object using "ed25519_oop.VerifyingKey" and then check for if the verify function returns None. If it returns None, then the signature is valid.

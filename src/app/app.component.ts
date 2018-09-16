@@ -23,9 +23,9 @@ import {Decimal} from 'decimal.js';
     </div>
     <div class="mat-headline">Nano BIP32-Ed25519</div>
     <div class="mat-caption">
-      The purpose of this page is to show how multiple Nano addresses can be produced from a parent public key and parent chain code with no knowledge of the counterpart parent and child private keys. A use case for such an ability would be the creation of watch-only wallets. This link includes other use cases: <a href="https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki#Use_cases">https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki#Use_cases</a><br>
+      The purpose of this page is to show how multiple Nano addresses can be produced from a parent public key and parent chain code with no knowledge of the counterpart parent and child private keys. A use case for such an ability would be the creation of watch-only wallets. This link includes other use cases: <a href="https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki#Use_cases" target="_blank">https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki#Use_cases</a><br>
       <br>
-      This page implements the BIP32-Ed25519 specification outlined in <a href="https://drive.google.com/file/d/0ByMtMw2hul0EMFJuNnZORDR2NDA/view" target="_blank" style="font-style:italics;"><i>BIP32-Ed25519 Hierarchical Deterministic Keys over a Non-linear Keyspace</i></a>. This method involves a non-traditional signing that nonetheless produces a signature verifiable by Nano nodes. See the underlying code for this page, including Python equivalent code for key and signature generation, here: <a href="https://github.com/superdarkbit/nano-bip32-ed25519">https://github.com/superdarkbit/nano-bip32-ed25519</a>
+      This page implements the BIP32-Ed25519 specification outlined in <a href="https://drive.google.com/file/d/0ByMtMw2hul0EMFJuNnZORDR2NDA/view" target="_blank" style="font-style:italics;"><i>BIP32-Ed25519 Hierarchical Deterministic Keys over a Non-linear Keyspace</i></a>. This method involves a non-traditional signing that nonetheless produces a signature verifiable by Nano nodes. See the underlying code for this page, including Python equivalent code for key and signature generation, here: <a href="https://github.com/superdarkbit/nano-bip32-ed25519" target="_blank">https://github.com/superdarkbit/nano-bip32-ed25519</a>
     </div>
     <div style="overflow-wrap: break-word;word-break: break-all;">
       <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="5px">
@@ -93,10 +93,10 @@ import {Decimal} from 'decimal.js';
                 <li>Click "Completely Fill Block Template" (may take a while as Proof of Work [PoW] is generated)</li>
                 <li>Broadcast/process the block
                   <ul style="font-size: 11px;">
-                    <li>Download and setup the Nano <strong>developer wallet</strong> if you haven't already: <a href="https://nano.org/en/wallet/">https://nano.org/en/wallet/</a></li>
-                    <li>Locate the config.json file for the wallet: <a href="https://github.com/nanocurrency/raiblocks/wiki/config.json#where-is-the-configuration-file-located">https://github.com/nanocurrency/raiblocks/wiki/config.json#where-is-the-configuration-file-located</a></li>
+                    <li>Download and setup the Nano <strong>developer wallet</strong> if you haven't already: <a href="https://nano.org/en/wallet/" target="_blank">https://nano.org/en/wallet/</a></li>
+                    <li>Locate the config.json file for the wallet: <a href="https://github.com/nanocurrency/raiblocks/wiki/config.json#where-is-the-configuration-file-located" target="_blank">https://github.com/nanocurrency/raiblocks/wiki/config.json#where-is-the-configuration-file-located</a></li>
                     <li>Open the config.json file and set "rpc_enable" to "true"</li>
-                    <li>Allow the wallet to sync. You can also directly download the ledger from <a href="https://yadi.sk/d/fcZgyES73Jzj5T">https://yadi.sk/d/fcZgyES73Jzj5T</a> and follow instructions found there</li>
+                    <li>Allow the wallet to sync. You can also directly download the ledger from <a href="https://yadi.sk/d/fcZgyES73Jzj5T" target="_blank">https://yadi.sk/d/fcZgyES73Jzj5T</a> and follow instructions found there</li>
                     <li>Open a command line and run the cURL command below</li>
                   </ul>
                 </li>
@@ -135,7 +135,7 @@ import {Decimal} from 'decimal.js';
               <input matInput [placeholder]="'Previous Block'" [(ngModel)]="example_block_prev"/>
             </mat-form-field>
             <button fxFlex="1 0 100%" mat-raised-button color="basic" style="background-color: #5795f1;color: #ffffff;"
-                    (click)="completelyFillExampleOpenBlock()" [disabled]="working">{{!example_block_work ? 'Completely Fill' : 'Update'}} Block Template
+                    (click)="completelyFillExampleOpenBlock()">{{!example_block_work ? 'Completely Fill' : 'Update'}} Block Template
             </button>
           </div>
           <div fxLayout="row wrap" fxLayoutAlign="start start" fxLayoutGap="5px" style="margin-top:10px;">
@@ -361,8 +361,8 @@ export class AppComponent {
     this.getWork(hex_to_get_work_for, function(work, hex, fromCache) {
       that.working = false;
       that.example_block_work = work.toUpperCase();
-      if (!fromCache)
-        that.snackBar.open('Proof of work found!', null, {duration: 10000});
+      that.snackBar.open(fromCache ? 'Retrieved PoW from cache.' : 'Proof of work found!', null, {duration: 7000});
+
     })
   }
 
