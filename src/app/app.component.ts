@@ -23,9 +23,9 @@ import {Decimal} from 'decimal.js';
     </div>
     <div class="mat-headline">Nano BIP32-Ed25519</div>
     <div class="mat-caption">
-      The purpose of this site is to show how multiple Nano addresses can be produced from a single parent public key and parent chain code with no knowledge of the counterpart parent and child private keys. A use case for such an ability would be the creation of watch-only wallets. This link includes other use cases: <a href="https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki#Use_cases">https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki#Use_cases</a><br>
+      The purpose of this page is to show how multiple Nano addresses can be produced from a parent public key and parent chain code with no knowledge of the counterpart parent and child private keys. A use case for such an ability would be the creation of watch-only wallets. This link includes other use cases: <a href="https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki#Use_cases">https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki#Use_cases</a><br>
       <br>
-      This page implements the BIP32-Ed25519 specification outlined in <a href="https://drive.google.com/file/d/0ByMtMw2hul0EMFJuNnZORDR2NDA/view" target="_blank" style="font-style:italics;"><i>BIP32-Ed25519 Hierarchical Deterministic Keys over a Non-linear Keyspace</i></a>. This method involves a non-traditional signing that nonetheless produces a signature verifiable by Nano nodes.
+      This page implements the BIP32-Ed25519 specification outlined in <a href="https://drive.google.com/file/d/0ByMtMw2hul0EMFJuNnZORDR2NDA/view" target="_blank" style="font-style:italics;"><i>BIP32-Ed25519 Hierarchical Deterministic Keys over a Non-linear Keyspace</i></a>. This method involves a non-traditional signing that nonetheless produces a signature verifiable by Nano nodes. See the underlying code for this page, including Python equivalent code for key and signature generation, here: <a href="https://github.com/superdarkbit/nano-bip32-ed25519">https://github.com/superdarkbit/nano-bip32-ed25519</a>
     </div>
     <div style="overflow-wrap: break-word;word-break: break-all;">
       <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="5px">
@@ -84,7 +84,7 @@ import {Decimal} from 'decimal.js';
               Do the following to test using transactions with the above Nano address (which was made from the public key above, which
               itself was generated from the parent public key and chain code with no help from any private keys):
               <ol>
-                <li>Send 0.000001 Nano to the address <strong>({{nano_account_addr_from_pub_child_key}})</strong></li>
+                <li>Send 0.000001 Nano to the address <strong>({{nano_account_addr_from_pub_child_key}})</strong> <span style="color: red;"> [do not test with large sums of Nano]</span></li>
                 <li>Go to <a href="http://nanode.co/account/{{nano_account_addr_from_pub_child_key}}" target="_blank">nanode.co/account/{{nano_account_addr_from_pub_child_key}}</a>
                   and copy the hash for the transaction of 0.000001 you made
                 </li>
@@ -96,7 +96,7 @@ import {Decimal} from 'decimal.js';
                     <li>Download and setup the Nano <strong>developer wallet</strong> if you haven't already: <a href="https://nano.org/en/wallet/">https://nano.org/en/wallet/</a></li>
                     <li>Locate the config.json file for the wallet: <a href="https://github.com/nanocurrency/raiblocks/wiki/config.json#where-is-the-configuration-file-located">https://github.com/nanocurrency/raiblocks/wiki/config.json#where-is-the-configuration-file-located</a></li>
                     <li>Open the config.json file and set "rpc_enable" to "true"</li>
-                    <li>Allow the wallet to sync (this could take some time)</li>
+                    <li>Allow the wallet to sync. You can also directly download the ledger from <a href="https://yadi.sk/d/fcZgyES73Jzj5T">https://yadi.sk/d/fcZgyES73Jzj5T</a> and follow instructions found there</li>
                     <li>Open a command line and run the cURL command below</li>
                   </ul>
                 </li>
@@ -106,7 +106,7 @@ import {Decimal} from 'decimal.js';
           <div>
             <strong>Block type:</strong>
             <mat-radio-group [(ngModel)]="type_of_the_example_block">
-              <mat-radio-button value="open" style="margin-left: 10px;" color="primary">Open</mat-radio-button>
+              <mat-radio-button value="open" style="margin-left: 10px;" color="primary" (change)="onOpenBlockRadioBtnChange($event)">Open</mat-radio-button>
               <mat-radio-button value="send" style="margin-left: 10px;" color="primary">Send</mat-radio-button>
               <mat-radio-button value="receive" style="margin-left: 10px;" color="primary">Receive</mat-radio-button>
             </mat-radio-group>
@@ -358,10 +358,11 @@ export class AppComponent {
 
     this.working = true;
     let hex_to_get_work_for = this.type_of_the_example_block == 'open' ? this.pub_child_key_hex : this.example_block_prev;
-    this.getWork(hex_to_get_work_for, function(work) {
+    this.getWork(hex_to_get_work_for, function(work, hex, fromCache) {
       that.working = false;
       that.example_block_work = work.toUpperCase();
-      that.snackBar.open('Work found!', null, {duration: 10000});
+      if (!fromCache)
+        that.snackBar.open('Proof of work found!', null, {duration: 10000});
     })
   }
 
@@ -369,7 +370,7 @@ export class AppComponent {
     let that = this;
 
     if (hex && localStorage.getItem(hex) && workCallback) {
-      workCallback(localStorage.getItem(hex), hex);
+      workCallback(localStorage.getItem(hex), hex, true);
       return;
     }
 
@@ -487,5 +488,11 @@ export class AppComponent {
     this.pub_child_key_hex = null;
     this.nano_account_addr_from_pub_child_key = null;
 
+  }
+
+  public onOpenBlockRadioBtnChange(event) {
+    if (event.value == 'open') {
+      this.example_block_prev = '0000000000000000000000000000000000000000000000000000000000000000';
+    }
   }
 }

@@ -32,7 +32,7 @@
     BigInteger.prototype.equalTo = BigInteger.prototype.equals;
 
 
-// BigInteger construction done right
+    // BigInteger construction done right
     function bi(s, base) {
         if (base != undefined) {
             if (base == 256) return bytes2bi(string2bytes(s));
@@ -234,11 +234,10 @@
         return concatenate_uint8_arrays([R, S])
     }
 
-
-// "Let k_tilde be 256-bit master secret. Then derive k = H512(k_tilde)
-// and denote its left 32-byte by kL and right one by kR. If the
-// third highest bit of the last byte of kL is not zero, discard k_tilde"
-// - "BIP32-Ed25519 Hierarchical Deterministic Keys over a Non-linear Keyspace" (https://drive.google.com/file/d/0ByMtMw2hul0EMFJuNnZORDR2NDA/view)
+    // "Let k_tilde be 256-bit master secret. Then derive k = H512(k_tilde)
+    // and denote its left 32-byte by kL and right one by kR. If the
+    // third highest bit of the last byte of kL is not zero, discard k_tilde"
+    // - "BIP32-Ed25519 Hierarchical Deterministic Keys over a Non-linear Keyspace" (https://drive.google.com/file/d/0ByMtMw2hul0EMFJuNnZORDR2NDA/view)
     function generate_proper_master_secret() {
 
         while (true) {
