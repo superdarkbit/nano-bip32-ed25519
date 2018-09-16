@@ -140,7 +140,7 @@ import {Decimal} from 'decimal.js';
           </div>
           <div fxLayout="row wrap" fxLayoutAlign="start start" fxLayoutGap="5px" style="margin-top:10px;">
             <div fxFlex="1 0 100%" class="mat-h4" [hidden]="!example_block_hash">
-              <strong>This Future Transaction's Hash:</strong> {{example_block_hash}}
+              <strong>This Block's Transaction Hash:</strong> {{example_block_hash}}
             </div>
             <div fxFlex="1 0 100%" class="mat-h4">
               <strong>cURL command (single line):</strong><br>
