@@ -106,7 +106,7 @@ import {Decimal} from 'decimal.js';
           <div>
             <strong>Block type:</strong>
             <mat-radio-group [(ngModel)]="type_of_the_example_block">
-              <mat-radio-button value="open" style="margin-left: 10px;" color="primary" (change)="onOpenBlockRadioBtnChange($event)">Open</mat-radio-button>
+              <mat-radio-button value="open" style="margin-left: 10px;" color="primary">Open</mat-radio-button>
               <mat-radio-button value="send" style="margin-left: 10px;" color="primary">Send</mat-radio-button>
               <mat-radio-button value="receive" style="margin-left: 10px;" color="primary">Receive</mat-radio-button>
             </mat-radio-group>
@@ -146,7 +146,7 @@ import {Decimal} from 'decimal.js';
               <strong>cURL command (single line):</strong><br>
               <code>
                 curl -g -d '&#123;"action": "process", "block": "&#123;\\"type\\": \\"state\\",\\"account\\": \\"{{nano_account_addr_from_pub_child_key}}\\",\\"previous\\":
-                \\"{{example_block_prev}}\\",\\"representative\\": \\"{{example_block_rep}}\\",\\"balance\\":
+                \\"{{type_of_the_example_block == 'open' ? '0000000000000000000000000000000000000000000000000000000000000000' : example_block_prev}}\\",\\"representative\\": \\"{{example_block_rep}}\\",\\"balance\\":
                 \\"{{example_block_bal()}}\\",\\"link\\": \\"{{example_block_link ? example_block_link : 'to be filled'}}\\",\\"signature\\":
                 \\"{{example_block_sig ? example_block_sig : 'to be filled'}}\\",\\"work\\":
                 \\"{{example_block_work ? example_block_work : 'to be filled'}}\\"&#125;"}' [::1]:7076
@@ -158,7 +158,7 @@ import {Decimal} from 'decimal.js';
 &#123;
     "type": "state",
     "account": "{{nano_account_addr_from_pub_child_key}}",
-    "previous": "{{example_block_prev}}",
+    "previous": "{{type_of_the_example_block == 'open' ? '0000000000000000000000000000000000000000000000000000000000000000' : example_block_prev}}",
     "representative": "{{example_block_rep}}",
     "balance": "{{example_block_bal()}}",
     "link": "{{example_block_link ? example_block_link : 'to be filled'}}",
@@ -175,7 +175,7 @@ import {Decimal} from 'decimal.js';
   "block": "&#123;
       "type": "state",
       "account": "{{nano_account_addr_from_pub_child_key}}",
-      "previous": "{{example_block_prev}}",
+      "previous": "{{type_of_the_example_block == 'open' ? '0000000000000000000000000000000000000000000000000000000000000000' : example_block_prev}}",
       "representative": "{{example_block_rep}}",
       "balance": "{{example_block_bal()}}",
       "link": "{{example_block_link ? example_block_link : 'to be filled'}}",
@@ -235,7 +235,7 @@ export class AppComponent {
 
   public type_of_the_example_block = "open";
   public example_block_hash = null;
-  public example_block_prev = '0000000000000000000000000000000000000000000000000000000000000000';
+  public example_block_prev = null;
   public example_block_rep = 'nano_1ninja7rh37ehfp9utkor5ixmxyg8kme8fnzc4zty145ibch8kf5jwpnzr3r';
   public example_block_link = null;
   public example_block_sig = null;
@@ -488,11 +488,5 @@ export class AppComponent {
     this.pub_child_key_hex = null;
     this.nano_account_addr_from_pub_child_key = null;
 
-  }
-
-  public onOpenBlockRadioBtnChange(event) {
-    if (event.value == 'open') {
-      this.example_block_prev = '0000000000000000000000000000000000000000000000000000000000000000';
-    }
   }
 }
