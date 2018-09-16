@@ -335,7 +335,7 @@ export class AppComponent {
 
     if (
       !this.example_block_link ||
-      !this.example_block_prev ||
+      (this.type_of_the_example_block != 'open' && !this.example_block_prev) ||
       (this.type_of_the_example_block == 'open' && !this.nano_account_cur_bal) ||
       ((this.type_of_the_example_block == 'send' || this.type_of_the_example_block == 'receive')  && !this.nano_account_amount_to_send_or_receive)
     ) {
@@ -346,7 +346,7 @@ export class AppComponent {
     try{
         this.example_block_hash = nano.hashBlock({
         account: this.nano_account_addr_from_pub_child_key,
-        previous: this.example_block_prev,
+        previous: this.type_of_the_example_block == 'open' ? '0000000000000000000000000000000000000000000000000000000000000000' : this.example_block_prev,
         representative: this.example_block_rep,
         balance: this.example_block_bal(),
         link: this.example_block_link
