@@ -118,17 +118,17 @@ import {Decimal} from 'decimal.js';
                      [(ngModel)]="example_block_link"/>
             </mat-form-field>
             <mat-form-field fxFlex="1 0 49%" *ngIf="type_of_the_example_block == 'send' || type_of_the_example_block == 'receive'">
-              <input type="number" step="0.000001" matInput placeholder="Account's Current Balance" [(ngModel)]="nano_account_cur_bal"/>
+              <input matInput type="number" step="0.000001" placeholder="Account's Current Balance" [(ngModel)]="nano_account_cur_bal"/>
               <mat-hint align="start" *ngIf="nano_account_cur_bal"><strong>{{nano_account_cur_bal}} Nano = {{nanoToRaw(nano_account_cur_bal)}} raw</strong></mat-hint>
             </mat-form-field>
             <mat-form-field fxFlex="1 0 49%" *ngIf="type_of_the_example_block == 'send' || type_of_the_example_block == 'receive'">
-              <input matInput
+              <input matInput type="number" step="0.000001"
                      [placeholder]="type_of_the_example_block == 'send' ? 'Send Amount' : (type_of_the_example_block == 'receive' ? 'Receive Amount' : '')"
                      [(ngModel)]="nano_account_amount_to_send_or_receive"/>
               <mat-hint align="start" *ngIf="nano_account_amount_to_send_or_receive"><strong>{{nano_account_amount_to_send_or_receive}} Nano = {{nanoToRaw(nano_account_amount_to_send_or_receive)}} raw</strong></mat-hint>
             </mat-form-field>
             <mat-form-field fxFlex="1 0 100%" *ngIf="type_of_the_example_block == 'open'">
-              <input matInput placeholder="Resulting Balance After Open" [(ngModel)]="nano_account_amount_to_open_with"/>
+              <input matInput type="number" step="0.000001" placeholder="Resulting Balance After Open" [(ngModel)]="nano_account_amount_to_open_with"/>
               <mat-hint align="start" *ngIf="nano_account_amount_to_open_with"><strong>{{nano_account_amount_to_open_with}} Nano = {{nanoToRaw(nano_account_amount_to_open_with)}} raw</strong></mat-hint>
             </mat-form-field>
             <mat-form-field fxFlex="1 0 100%" *ngIf="type_of_the_example_block == 'send' || type_of_the_example_block == 'receive'">
@@ -168,7 +168,7 @@ import {Decimal} from 'decimal.js';
 </pre>
             </div>
             <div fxFlex="1 0 calc(48%-2.5px)" fxFlex.xs="100%" class="mat-h4">
-              <strong>RPC Call:</strong>
+              <strong>RPC call:</strong>
               <pre style="overflow: auto;">
 &#123;
   "action": "process",
@@ -327,14 +327,28 @@ export class AppComponent {
   public completelyFillExampleOpenBlock() {
     let that = this;
 
+    if (
+      !this.example_block_link ||
+      !this.example_block_prev ||
+      (this.type_of_the_example_block == 'open' && !this.nano_account_cur_bal) ||
+      ((this.type_of_the_example_block == 'send' || this.type_of_the_example_block == 'receive')  && !this.nano_account_amount_to_send_or_receive)
+    ) {
+      this.snackBar.open('Some fields are empty or have invalid input', null, {duration: 5000});
+      return;
+    }
 
-    this.example_block_hash = nano.hashBlock({
-      account: this.nano_account_addr_from_pub_child_key,
-      previous: this.example_block_prev,
-      representative: this.example_block_rep,
-      balance: this.example_block_bal(),
-      link: this.example_block_link
-    });
+    try{
+        this.example_block_hash = nano.hashBlock({
+        account: this.nano_account_addr_from_pub_child_key,
+        previous: this.example_block_prev,
+        representative: this.example_block_rep,
+        balance: this.example_block_bal(),
+        link: this.example_block_link
+        });
+      } catch(err) {
+        this.snackBar.open(err.message, null, {duration: 5000});
+        return;
+      }
 
     let example_block_hash_uint8 = bip32_ed25519.hexToUint8(this.example_block_hash)
 
@@ -379,9 +393,14 @@ export class AppComponent {
 
   public onMasterSeedKey(event) {
     if (this.properMasterSeedAsHex.length == 64) {
-      this.properMasterSeedAsMnemonic = bip39.entropyToMnemonic(this.properMasterSeedAsHex);
-      this.properMasterSeedAsUint8 = bip32_ed25519.hexToUint8(this.properMasterSeedAsHex);
-      this.generateKeysAndOther();
+      try {
+        this.properMasterSeedAsMnemonic = bip39.entropyToMnemonic(this.properMasterSeedAsHex);
+        this.properMasterSeedAsUint8 = bip32_ed25519.hexToUint8(this.properMasterSeedAsHex);
+        this.generateKeysAndOther();
+      } catch(err) {
+        this.snackBar.open(err.message, null, {duration: 5000});
+        return;
+      }
     } else {
       this.properMasterSeedAsMnemonic = null;
       this.properMasterSeedAsUint8 = null;
@@ -395,7 +414,8 @@ export class AppComponent {
         this.properMasterSeedAsUint8 = bip32_ed25519.hexToUint8(this.properMasterSeedAsHex);
         this.generateKeysAndOther();
       } catch(err) {
-        console.log(err);
+        this.snackBar.open(err.message, null, {duration: 5000});
+        return;
       }
     } else {
       this.properMasterSeedAsHex = null;
@@ -404,12 +424,17 @@ export class AppComponent {
   }
 
   public nanoToRaw(amount) {
-    let dec = Decimal;
-    let nan = nano;
     if (amount === 0 || amount === '0')
       return "0";
-    else
-      return nano.convert(new Decimal(amount.toString()).toFixed(), {from: 'Nano', to: 'raw'}).toString();
+    else {
+      try {
+        let amountAsDecimal = new Decimal(amount.toString())
+        let absoluteVal = nano.convert(amountAsDecimal.absoluteValue().toFixed(), {from: 'Nano', to: 'raw'}).toString();
+        return (amountAsDecimal.isNegative() ? '-' : '') + absoluteVal;
+      } catch(err) {
+        return '[error]';
+      }
+    }
   }
 
   public example_block_bal() {
