@@ -146,7 +146,7 @@ import {Decimal} from 'decimal.js';
               <strong>cURL command (single line):</strong><br>
               <code>
                 curl -g -d '&#123;"action": "process", "block": "&#123;\\"type\\": \\"state\\",\\"account\\": \\"{{nano_account_addr_from_pub_child_key}}\\",\\"previous\\":
-                \\"{{type_of_the_example_block == 'open' ? '0000000000000000000000000000000000000000000000000000000000000000' : example_block_prev}}\\",\\"representative\\": \\"{{example_block_rep}}\\",\\"balance\\":
+                \\"{{type_of_the_example_block == 'open' ? '0000000000000000000000000000000000000000000000000000000000000000' : (example_block_prev ? example_block_prev : 'to be filled')}}\\",\\"representative\\": \\"{{example_block_rep}}\\",\\"balance\\":
                 \\"{{example_block_bal()}}\\",\\"link\\": \\"{{example_block_link ? example_block_link : 'to be filled'}}\\",\\"signature\\":
                 \\"{{example_block_sig ? example_block_sig : 'to be filled'}}\\",\\"work\\":
                 \\"{{example_block_work ? example_block_work : 'to be filled'}}\\"&#125;"}' [::1]:7076
@@ -158,7 +158,7 @@ import {Decimal} from 'decimal.js';
 &#123;
     "type": "state",
     "account": "{{nano_account_addr_from_pub_child_key}}",
-    "previous": "{{type_of_the_example_block == 'open' ? '0000000000000000000000000000000000000000000000000000000000000000' : example_block_prev}}",
+    "previous": "{{type_of_the_example_block == 'open' ? '0000000000000000000000000000000000000000000000000000000000000000' : (example_block_prev ? example_block_prev : 'to be filled')}}",
     "representative": "{{example_block_rep}}",
     "balance": "{{example_block_bal()}}",
     "link": "{{example_block_link ? example_block_link : 'to be filled'}}",
@@ -175,7 +175,7 @@ import {Decimal} from 'decimal.js';
   "block": "&#123;
       "type": "state",
       "account": "{{nano_account_addr_from_pub_child_key}}",
-      "previous": "{{type_of_the_example_block == 'open' ? '0000000000000000000000000000000000000000000000000000000000000000' : example_block_prev}}",
+      "previous": "{{type_of_the_example_block == 'open' ? '0000000000000000000000000000000000000000000000000000000000000000' : (example_block_prev ? example_block_prev : 'to be filled')}}",
       "representative": "{{example_block_rep}}",
       "balance": "{{example_block_bal()}}",
       "link": "{{example_block_link ? example_block_link : 'to be filled'}}",
