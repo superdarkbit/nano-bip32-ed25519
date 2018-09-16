@@ -261,6 +261,12 @@ export class AppComponent {
   }
 
   public generateKeysAndOther() {
+    if (this.derivationPath.endsWith("'")) {
+      this.snackBar.open('Hardened child public keys can not be derived from a parent public key.', null, {duration: 6000});
+      this.nullOutParentAndChildNodeData();
+      return;
+    }
+
     if (!this.properMasterSeedAsUint8) {
       this.generateProperMasterSeed();
     }
@@ -272,14 +278,14 @@ export class AppComponent {
     let parentPath = this.derivationPath.substr(0, indexOfLastSlash)
 
     if (!(this.child_index >= 0)) {
-      this.snackBar.open('Error in the derivation path entered.', null, {duration: 10000});
+      this.snackBar.open('Error in the derivation path entered.', null, {duration: 6000});
       this.nullOutParentAndChildNodeData();
       return;
     }
 
     this.chain = bip32_ed25519.derive_chain(this.properMasterSeedAsUint8, parentPath)
     if (!this.chain) {
-      this.snackBar.open('Bad/unsafe node generated along the derivation chain.', null, {duration: 10000});
+      this.snackBar.open('Bad/unsafe node generated along the derivation chain.', null, {duration: 6000});
       this.nullOutParentAndChildNodeData();
     } else {
       this.parent_priv_key = new Uint8Array(64);
