@@ -128,20 +128,6 @@ def special_signing(kL, kR, A, M): # private/secret key left and right sides kL 
     S = ed25519.encodeint((r + (x * int.from_bytes(kL, 'little'))) % ed25519.l)
     return R+S
 
-def verify(A, M, sig):
-    sigL, sigR = sig[:32], sig[32:]
-    R = ed25519.decodepoint(sigL)
-    S = int.from_bytes(sigR, 'little')
-
-    A_prime = ed25519.decodepoint(A)
-
-    k = int.from_bytes(h512(ed25519.encodepoint(R) + A + ed25519.encodepoint(M)), 'little')
-
-    if ed25519.scalarmultbase(S) == ed25519.edwards(R, ed25519.scalarmult(A_prime, k)):
-        return True
-    else:
-        return False
-
 # "Let k_tilde be 256-bit master secret. Then derive k = H512(k_tilde)
 # and denote its left 32-byte by kL and right one by kR. If the
 # third highest bit of the last byte of kL is not zero, discard k_tilde"
